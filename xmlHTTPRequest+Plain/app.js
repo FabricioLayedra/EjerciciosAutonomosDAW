@@ -34,7 +34,7 @@ function makeRequest(url) {
 function alertContents() {
     if (http_request.readyState == 4) {
         if (http_request.status == 200) {
-            alert(http_request.responseText);
+           
         } else {
             alert('Hubo problemas con la petición.');
         }

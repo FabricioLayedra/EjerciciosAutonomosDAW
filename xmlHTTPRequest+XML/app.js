@@ -8,7 +8,7 @@ function makeRequest(url) {
     if (window.XMLHttpRequest) { // Mozilla, Safari,...
         http_request = new XMLHttpRequest();
         if (http_request.overrideMimeType) {
-            http_request.overrideMimeType('text/plain');
+            http_request.overrideMimeType('text/XML');
             // Ver nota sobre esta linea al final
         }
     } else if (window.ActiveXObject) { // IE
@@ -34,7 +34,20 @@ function makeRequest(url) {
 function alertContents() {
     if (http_request.readyState == 4) {
         if (http_request.status == 200) {
-            /*Aquí deben procesar el archivo y cargar la información en el contenedor especificado*/
+            lista =document.getElementById("lista-canciones")
+            while (lista.hasChildNodes())
+                lista.removeChild(lista.firstChild);
+            let xmldoc = http_request.responseXML;
+            let root_node = xmldoc.getElementsByTagName('cancion');
+            txt = "Estas son sus canciones!";
+            for (i = 0; i < root_node.length; i++) {
+                let fila = document.createElement("LI");
+                let content = document.createTextNode(root_node[i].getAttribute("titulo"));
+                fila.appendChild(content);
+                lista.appendChild(fila);
+            }
+            alert(txt);
+
         } else {
             alert('Hubo problemas con la petición.');
         }
@@ -44,6 +57,6 @@ function alertContents() {
 window.onload = function() {
     var link = document.getElementById('requerimiento');
     link.onclick = function() {
-        makeRequest('      ');
+        makeRequest('datos.xml');
     }
 }
